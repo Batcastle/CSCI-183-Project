@@ -46,5 +46,7 @@ try:
 			print("\nCSCI-183 Project Version %s" % (VERSION))
 		else:
 			print("\nOption not supported. Please try '-h' or '--help'.")
+	else:
+		print("\nNo options passed. Exiting . . .")
 except:
 	print("\nAn error has occured.")
