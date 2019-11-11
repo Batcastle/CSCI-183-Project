@@ -4,6 +4,8 @@
 #  main.py
 #
 #  Copyright 2019 Thomas Castleman <contact@draugeros.org>
+#				  Ryan Coons <rcoons@unca.edu>
+#				  Alexander Goldstaub <agoldsta@unca.edu>
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
