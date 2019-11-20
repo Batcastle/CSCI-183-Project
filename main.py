@@ -32,10 +32,41 @@ from os import system
 from sys import argv
 
 #Define Functions
+#Ajacentcy function
+def ajac(Point_A,Point_B):
+	#Vars should be lists of length 2 containing ints
+	#check if point A and point B are ajacent to each other either horizontally,
+	#vertically, or diagonally
+	#Return 0 if horizontal
+	#return 1 if vertical
+	#return 2 if diagonal
+	#return 3 if either:
+	#	Point A IS Point B
+	#	Point A and Point B ARE NOT ajacent
 
+	#Are Point A and Point B the same?
+	if (Point_A == Point_B):
+		return 3
+	#are point A and point B diagonal to each other
+	elif ( ((Point_A[0] - 1) == Point_B[0]) or ((Point_A[0] + 1) == Point_B[0]) ) and ((Point_A[1] - 1) == Point_B[1]) or ((Point_A[1] + 1) == Point_B[1]):
+		return 2
+	#Are Point A and Point B vertical to each other
+	elif ((Point_A[0] - 1) == Point_B[0]) or ((Point_A[0] + 1) == Point_B[0]):
+		return 1
+	#Are point A and Point B horizontal to each other
+	elif ((Point_A[1] - 1) == Point_B[1]) or ((Point_A[1] + 1) == Point_B[1]):
+		return 0
+	#else
+	else:
+		return 3
+
+		
 #Define Initial Variables
+#Street Dictionary, this will be 2D
+MAP = {}
+
 #Version of the project. Any time you make a major change, bump the number by one.
-VERSION = "0.0.1-alpha1"
+VERSION = "0.0.2-alpha1"
 #Use argc so we don't go over the length of argv
 argc = len(argv)
 
