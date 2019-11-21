@@ -1,98 +1,86 @@
-#this code taken from https://dev.to/mxl/dijkstras-algorithm-in-python-algorithms-for-beginners-dkc
-from collections import deque, namedtuple
+#this code taken from https://www.geeksforgeeks.org/python-program-for-dijkstras-shortest-path-algorithm-greedy-algo-7/
 
+# Python program for Dijkstra's single 
+# source shortest path algorithm. The program is 
+# for adjacency matrix representation of the graph 
 
-# we'll use infinity as a default distance to nodes.
-inf = float('inf')
-Edge = namedtuple('Edge', 'start, end, cost')
+# Library for INT_MAX 
+import sys 
 
+class Graph(): 
 
-def make_edge(start, end, cost=1):
-  return Edge(start, end, cost)
+	def __init__(self, vertices): 
+		self.V = vertices 
+		self.graph = [[0 for column in range(vertices)] 
+					for row in range(vertices)] 
 
+	def printSolution(self, dist): 
+		print "Vertex tDistance from Source"
+		for node in range(self.V): 
+			print node, "t", dist[node] 
 
-class Graph:
-    def __init__(self, edges):
-        # let's check that the data is right
-        wrong_edges = [i for i in edges if len(i) not in [2, 3]]
-        if wrong_edges:
-            raise ValueError('Wrong edges data: {}'.format(wrong_edges))
+	# A utility function to find the vertex with 
+	# minimum distance value, from the set of vertices 
+	# not yet included in shortest path tree 
+	def minDistance(self, dist, sptSet): 
 
-        self.edges = [make_edge(*edge) for edge in edges]
+		# Initilaize minimum distance for next node 
+		min = sys.maxint 
 
-    @property
-    def vertices(self):
-        return set(
-            sum(
-                ([edge.start, edge.end] for edge in self.edges), []
-            )
-        )
+		# Search not nearest vertex not in the 
+		# shortest path tree 
+		for v in range(self.V): 
+			if dist[v] < min and sptSet[v] == False: 
+				min = dist[v] 
+				min_index = v 
 
-    def get_node_pairs(self, n1, n2, both_ends=True):
-        if both_ends:
-            node_pairs = [[n1, n2], [n2, n1]]
-        else:
-            node_pairs = [[n1, n2]]
-        return node_pairs
+		return min_index 
 
-    def remove_edge(self, n1, n2, both_ends=True):
-        node_pairs = self.get_node_pairs(n1, n2, both_ends)
-        edges = self.edges[:]
-        for edge in edges:
-            if [edge.start, edge.end] in node_pairs:
-                self.edges.remove(edge)
+	# Funtion that implements Dijkstra's single source 
+	# shortest path algorithm for a graph represented 
+	# using adjacency matrix representation 
+	def dijkstra(self, src): 
 
-    def add_edge(self, n1, n2, cost=1, both_ends=True):
-        node_pairs = self.get_node_pairs(n1, n2, both_ends)
-        for edge in self.edges:
-            if [edge.start, edge.end] in node_pairs:
-                return ValueError('Edge {} {} already exists'.format(n1, n2))
+		dist = [sys.maxint] * self.V 
+		dist[src] = 0
+		sptSet = [False] * self.V 
 
-        self.edges.append(Edge(start=n1, end=n2, cost=cost))
-        if both_ends:
-            self.edges.append(Edge(start=n2, end=n1, cost=cost))
+		for cout in range(self.V): 
 
-    @property
-    def neighbours(self):
-        neighbours = {vertex: set() for vertex in self.vertices}
-        for edge in self.edges:
-            neighbours[edge.start].add((edge.end, edge.cost))
+			# Pick the minimum distance vertex from 
+			# the set of vertices not yet processed. 
+			# u is always equal to src in first iteration 
+			u = self.minDistance(dist, sptSet) 
 
-        return neighbours
+			# Put the minimum distance vertex in the 
+			# shotest path tree 
+			sptSet[u] = True
 
-    def dijkstra(self, source, dest):
-        assert source in self.vertices, 'Such source node doesn\'t exist'
-        distances = {vertex: inf for vertex in self.vertices}
-        previous_vertices = {
-            vertex: None for vertex in self.vertices
-        }
-        distances[source] = 0
-        vertices = self.vertices.copy()
+			# Update dist value of the adjacent vertices 
+			# of the picked vertex only if the current 
+			# distance is greater than new distance and 
+			# the vertex in not in the shotest path tree 
+			for v in range(self.V): 
+				if self.graph[u][v] > 0 and sptSet[v] == False and \ 
+				dist[v] > dist[u] + self.graph[u][v]: 
+						dist[v] = dist[u] + self.graph[u][v] 
 
-        while vertices:
-            current_vertex = min(
-                vertices, key=lambda vertex: distances[vertex])
-            vertices.remove(current_vertex)
-            if distances[current_vertex] == inf:
-                break
-            for neighbour, cost in self.neighbours[current_vertex]:
-                alternative_route = distances[current_vertex] + cost
-                if alternative_route < distances[neighbour]:
-                    distances[neighbour] = alternative_route
-                    previous_vertices[neighbour] = current_vertex
+		self.printSolution(dist) 
 
-        path, current_vertex = deque(), dest
-        while previous_vertices[current_vertex] is not None:
-            path.appendleft(current_vertex)
-            current_vertex = previous_vertices[current_vertex]
-        if path:
-            path.appendleft(current_vertex)
-        return path
+# Driver program 
+g = Graph(9) 
+g.graph = [[0, 4, 0, 0, 0, 0, 0, 8, 0], 
+		[4, 0, 8, 0, 0, 0, 0, 11, 0], 
+		[0, 8, 0, 7, 0, 4, 0, 0, 2], 
+		[0, 0, 7, 0, 9, 14, 0, 0, 0], 
+		[0, 0, 0, 9, 0, 10, 0, 0, 0], 
+		[0, 0, 4, 14, 10, 0, 2, 0, 0], 
+		[0, 0, 0, 0, 0, 2, 0, 1, 6], 
+		[8, 11, 0, 0, 0, 0, 1, 0, 7], 
+		[0, 0, 2, 0, 0, 0, 6, 7, 0] 
+		]; 
 
+g.dijkstra(0); 
 
-graph = Graph([
-    ("a", "b", 7),  ("a", "c", 9),  ("a", "f", 14), ("b", "c", 10),
-    ("b", "d", 15), ("c", "d", 11), ("c", "f", 2),  ("d", "e", 6),
-    ("e", "f", 9)])
+# This code is contributed by Divyanshu Mehta 
 
-print(graph.dijkstra("a", "e"))
