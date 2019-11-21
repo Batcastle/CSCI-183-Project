@@ -60,10 +60,20 @@ def ajac(Point_A,Point_B):
 	else:
 		return 3
 
+#Check to make sure all points on route are connected
+def check_connected(route_list):
+	for each in range(0:len(route_list)):
+		if ( route_list[each][1] == route_list[each + 1][0] ):
+			continue
+		else:
+			return 1
+	return 0
+
 		
 #Define Initial Variables
-#Street Dictionary, this will be 2D
-MAP = {}
+#Street List, this will be 2D
+#This WAS a dictionary, until I realized that was egreegious and not needed
+MAP = []
 
 #Version of the project. Any time you make a major change, bump the number by one.
 VERSION = "0.0.2-alpha1"
