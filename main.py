@@ -30,6 +30,8 @@
 from os import system
 #use argv to take input on the command line
 from sys import argv
+#get square root function
+from math import sqrt
 
 #Define Functions
 #Ajacentcy function
@@ -69,7 +71,25 @@ def check_connected(route_list):
 			return 1
 	return 0
 
-		
+#create matrix of desired size
+def create_matix(node_count):
+	side = sqrt(node_count)
+	matrix = []
+	if ( (side % 1) != 0 ):
+		side = int(side)
+		side = side - 1
+		top_side = side
+		left_side = side + 1
+	else:
+		top_side = side
+		left_side = side
+	for each in left_side:
+		matrix.append([])
+	#This will need to be modified to use letters if we go that route instead of using the algorithum in that branch
+	for each in matrix:
+		for each in range(top_side +  1):
+			matrix[each].append(0)
+			
 #Define Initial Variables
 #Street List, this will be 2D
 #This WAS a dictionary, until I realized that was egreegious and not needed
