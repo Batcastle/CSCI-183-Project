@@ -22,7 +22,7 @@
 #
 #
 
-from algorithim.dijkstra_algorithm import Graph
+from algorithm.dijkstra_algorithm import Graph
 # from algorithim.dijkstra_algorithm import Graph.dijkstra as dijkstra
 # from algorithim.dijkstra_algorithm import Graph.minDistance as minDistance
 # from algorithim.dijkstra_algorithm import Graph.printSolution as printSolution

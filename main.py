@@ -29,9 +29,12 @@
 #use the system() command to run outside scripts
 from os import system
 #use argv to take input on the command line
-from sys import argv
+from sys import argv,exc_info
 #import algorithim to use
-import "dijkstra-algorithim.py"
+import algorithm
+#get square root function
+from math import sqrt,floor
+
 
 #Define Functions
 #Ajacentcy function
@@ -64,12 +67,41 @@ def ajac(Point_A,Point_B):
 
 #Check to make sure all points on route are connected
 def check_connected(route_list):
-	for each in range(0:len(route_list)):
+	for each in range(0,len(route_list)):
 		if ( route_list[each][1] == route_list[each + 1][0] ):
 			continue
 		else:
 			return 1
 	return 0
+
+
+#create matrix of desired size
+def create_matix(node_count,first_point):
+	side = sqrt(node_count)
+	matrix = []
+	if ( (side % 1) != 0 ):
+		side = int(floor(side))
+		side = side - 1
+		top_side = side
+		left_side = side + 1
+	else:
+		top_side = int(floor(side))
+		left_side = int(floor(side))
+	for each in range(0,left_side):
+		matrix.append([])
+	#This will need to be modified to use letters if we go that route instead of using the algorithum in that branch
+	for each in matrix:
+		for each in range(0,top_side):
+			matrix[each].append(float('inf'))
+	matrix[first_point[0]][first_point[1]] = 0
+	return(matrix)
+
+#Print the Matrix (mostly for debugging)
+def print_matrix(array):
+	for row in array:
+		for each in row:
+			print(each,end=" ")
+		print()
 
 
 #Define Initial Variables
@@ -89,9 +121,24 @@ try:
 			print("\nFor now, main.py does nothing other than print this help dialog and print the current version.")
 		elif (argv[1] == "-v" or argv[1] == "--version"):
 			print("\nCSCI-183 Project Version %s" % (VERSION))
-		else:
-			print("\nOption not supported. Please try '-h' or '--help'.")
+		if (argc > 2):
+			try:
+				MAP_SIZE = argv[1]
+				FIRST_POINT = argv[2]
+				MAP_SIZE = float(MAP_SIZE)
+				FIRST_POINT = FIRST_POINT.split(",")
+				FIRST_POINT[0] = int(FIRST_POINT[0])
+				FIRST_POINT[1] = int(FIRST_POINT[1])
+				if (isinstance(MAP_SIZE,int) or isinstance(MAP_SIZE,float)):
+					MAP = create_matix(MAP_SIZE,FIRST_POINT)
+					print_matrix(MAP)
+				else:
+					print("\nOption not supported. Please try '-h' or '--help'.")
+			except:
+				print("\nOption not supported. Please try '-h' or '--help'.")
 	else:
 		print("\nNo options passed. Exiting . . .")
 except:
+	#use this command for debugging
+	print(exc_info())
 	print("\nAn error has occured.")
