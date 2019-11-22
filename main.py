@@ -30,6 +30,8 @@
 from os import system
 #use argv to take input on the command line
 from sys import argv
+#import algorithim to use
+import "dijkstra-algorithim.py"
 
 #Define Functions
 #Ajacentcy function
@@ -69,7 +71,7 @@ def check_connected(route_list):
 			return 1
 	return 0
 
-		
+
 #Define Initial Variables
 #Street List, this will be 2D
 #This WAS a dictionary, until I realized that was egreegious and not needed
