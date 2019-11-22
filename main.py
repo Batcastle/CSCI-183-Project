@@ -31,7 +31,7 @@ from os import system
 #use argv to take input on the command line
 from sys import argv
 #get square root function
-from math import sqrt
+from math import sqrt,floor
 
 #Define Functions
 #Ajacentcy function
@@ -72,23 +72,26 @@ def check_connected(route_list):
 	return 0
 
 #create matrix of desired size
-def create_matix(node_count):
+def create_matix(node_count,first_point):
 	side = sqrt(node_count)
 	matrix = []
 	if ( (side % 1) != 0 ):
-		side = int(side)
+		side = int(floor(side))
 		side = side - 1
 		top_side = side
 		left_side = side + 1
 	else:
-		top_side = side
-		left_side = side
-	for each in left_side:
+		top_side = int(floor(side))
+		left_side = int(floor(side))
+	for each in range(0,left_side):
 		matrix.append([])
 	#This will need to be modified to use letters if we go that route instead of using the algorithum in that branch
 	for each in matrix:
-		for each in range(top_side +  1):
-			matrix[each].append(0)
+		for each in range(0,top_side):
+			matrix[each].append(float('inf'))
+	matrix[first_point[0]][first_point[1]] = 0
+	return(matrix)
+
 			
 #Define Initial Variables
 #Street List, this will be 2D
