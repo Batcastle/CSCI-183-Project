@@ -25,15 +25,23 @@
 #
 #This is the main file. We can call other files if we need to, but try to just define functions instead
 
+############################################################
+
 #Import the Modules we need, preferably with only the functions and classes we need to reduce RAM usage
+
 #use the system() command to run outside scripts
 from os import system
+
 #use argv to take input on the command line
 from sys import argv
+
 #get square root function
 from math import sqrt,floor
 
+##########################################################################
+
 #Define Functions
+
 #Ajacentcy function
 def ajac(Point_A,Point_B):
 	#Vars should be lists of length 2 containing ints
@@ -62,6 +70,8 @@ def ajac(Point_A,Point_B):
 	else:
 		return 3
 
+
+
 #Check to make sure all points on route are connected
 def check_connected(route_list):
 	for each in range(0:len(route_list)):
@@ -70,6 +80,8 @@ def check_connected(route_list):
 		else:
 			return 1
 	return 0
+
+
 
 #create matrix of desired size
 def create_matix(node_count,first_point):
@@ -92,12 +104,17 @@ def create_matix(node_count,first_point):
 	matrix[first_point[0]][first_point[1]] = 0
 	return(matrix)
 
+
+
 #print 2D vector in a nice, easy to read method
 def pretty_best_path_output(best_path):
 	print("START ---> ",end="")
 	for each in best_path:
 		print("(%s,%s) ---> " % (each[0],each[1]), end="")
 	print("END")
+
+
+
 
 #Print all possible paths
 def pretty_all_paths_output(paths):
@@ -108,6 +125,9 @@ def pretty_all_paths_output(paths):
 		number = number + 1
 	print("")
 
+
+
+
 #Print the Matrix (mostly for debugging)
 def print_matrix(array):
 	for row in array:
@@ -115,15 +135,45 @@ def print_matrix(array):
 			print(each,end=" ")
 		print()
 
+
+
+
+#LOOPS THROUGH A MATRIX
+def parser(A,start,end):
+    row=0
+    col=start
+    noback=[]
+    path=[]
+    while True:
+        if col == end:
+            break
+        for i in noback:
+            if row==i:
+                row=row+1
+        if A[row][col]>0:
+            path.append([row,col])
+            noback.append(col)
+            col=row
+            row=0
+        else:
+            row=row+1
+    print(path)
+
+##########################################################################
+
 #Define Initial Variables
+
 #Street List, this will be 2D
 #This WAS a dictionary, until I realized that was egreegious and not needed
 MAP = []
 
 #Version of the project. Any time you make a major change, bump the number by one.
 VERSION = "0.0.2-alpha1"
+
 #Use argc so we don't go over the length of argv
 argc = len(argv)
+
+################################################################################
 
 #Do all the I/O and processing we need
 try:
