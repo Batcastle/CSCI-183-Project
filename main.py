@@ -92,7 +92,29 @@ def create_matix(node_count,first_point):
 	matrix[first_point[0]][first_point[1]] = 0
 	return(matrix)
 
-			
+#print 2D vector in a nice, easy to read method
+def pretty_best_path_output(best_path):
+	print("START ---> ",end="")
+	for each in best_path:
+		print("(%s,%s) ---> " % (each[0],each[1]), end="")
+	print("END")
+
+#Print all possible paths
+def pretty_all_paths_output(paths):
+	number = 1
+	for each in paths:
+		print("\nPath %s:" % (number))
+		pretty_best_path_output(each)
+		number = number + 1
+	print("")
+
+#Print the Matrix (mostly for debugging)
+def print_matrix(array):
+	for row in array:
+		for each in row:
+			print(each,end=" ")
+		print()
+
 #Define Initial Variables
 #Street List, this will be 2D
 #This WAS a dictionary, until I realized that was egreegious and not needed
