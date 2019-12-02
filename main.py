@@ -84,7 +84,7 @@ def check_connected(route_list):
 
 
 #create matrix of desired size
-def create_matix(node_count,first_point):
+def create_matrix(node_count):
 	side = sqrt(node_count)
 	matrix = []
 	if ( (side % 1) != 0 ):
@@ -97,11 +97,12 @@ def create_matix(node_count,first_point):
 		left_side = int(floor(side))
 	for each in range(0,left_side):
 		matrix.append([])
-	#This will need to be modified to use letters if we go that route instead of using the algorithum in that branch
 	for each in matrix:
 		for each in range(0,top_side):
-			matrix[each].append(float('inf'))
-	matrix[first_point[0]][first_point[1]] = 0
+			matrix[each].append(1)
+	for each in range(0,top_side):
+		matrix[each][each] = 0
+			
 	return(matrix)
 
 
