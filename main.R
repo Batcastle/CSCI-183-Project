@@ -25,4 +25,18 @@
 #
 #Main R File, use as template for the others
 argv = commandArgs(trailingOnly=TRUE)
-print(argv)
+argc = length(argv)
+VERSION = "0.0.2-alpha1"
+
+if ( argc >= 1 ){
+	if (argv[1] == "-h" | argv[1] == "--help"){
+		cat("main.R is used to read the file 'flightmap.csv' in the same directory as this file, and is only supposed to be called by 'main.py'.Please only interact with 'main.py' from command line.")
+	} else if (argv[1] == "-v" | argv[1] == "--version"){
+		cat(VERSION)
+	} else {
+		cat("Option not supported. Please try '-h' or '--help'.")
+	}
+} else {
+	cat("main.R has not been written yet.")
+	#when you have the data read in and done any pre-cleaning needed, just use cat() to send it out to main.py
+}

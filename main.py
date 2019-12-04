@@ -29,8 +29,8 @@
 
 #Import the Modules we need, preferably with only the functions and classes we need to reduce RAM usage
 
-#use the system() command to run outside scripts
-from os import system
+#use the check_output() command to run outside scripts and return output
+from subprocess import check_output
 
 #use argv to take input on the command line
 from sys import argv
@@ -194,7 +194,7 @@ def pathfinder(A,start,end):
 MAP = []
 
 #Version of the project. Any time you make a major change, bump the number by one.
-VERSION = "0.0.2-alpha1"
+VERSION = "0.0.6-alpha1"
 
 #Use argc so we don't go over the length of argv
 argc = len(argv)
@@ -211,6 +211,14 @@ try:
 		else:
 			print("\nOption not supported. Please try '-h' or '--help'.")
 	else:
+		# All this is code to receive and translate output from main.R
+		# CSV_DATA = check_output(["main.R"])
+		# CSV_DATA = str(CSV_DATA)
+		# CSV_DATA = list(CSV_DATA)
+		# del(CSV_DATA[1])
+		# del(CSV_DATA[0])
+		# del(CSV_DATA[len(CSV_DATA) - 1])
+		# CSV_DATA = "".join(CSV_DATA)
 		A[path[len(path)-1][0]][path[len(path)-1][1]]=0 #sets the last node used to 0
 		#attempt to create a list of possible paths.
 		masterlist=[]
