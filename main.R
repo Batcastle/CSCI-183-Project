@@ -26,6 +26,7 @@
 #Main R File, use as template for the others
 argv = commandArgs(trailingOnly=TRUE)
 argc = length(argv)
+options(width=10000) 
 VERSION = "0.0.2-alpha1"
 
 if ( argc >= 1 ){
@@ -37,6 +38,7 @@ if ( argc >= 1 ){
 		cat("Option not supported. Please try '-h' or '--help'.")
 	}
 } else {
-	cat("main.R has not been written yet.")
+	flightmap = read.csv("flightmap.csv")
 	#when you have the data read in and done any pre-cleaning needed, just use cat() to send it out to main.py
+	head(flightmap[,1:11], addrownums = FALSE)
 }
