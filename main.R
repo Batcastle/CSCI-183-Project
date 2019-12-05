@@ -39,6 +39,7 @@ if ( argc >= 1 ){
 	}
 } else {
 	flightmap = read.csv("flightmap.csv")
-	#when you have the data read in and done any pre-cleaning needed, just use cat() to send it out to main.py
-	head(flightmap[,1:11], addrownums = FALSE)
+	# when you have the data read in and done any pre-cleaning needed, just use print(), cat(), or head() to send it out to main.py
+	# whatever is cleanist
+	print(flightmap[1:10,1:11])
 }

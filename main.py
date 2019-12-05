@@ -74,7 +74,7 @@ def ajac(Point_A,Point_B):
 
 #Check to make sure all points on route are connected
 def check_connected(route_list):
-	for each in range(0:len(route_list)):
+	for each in range(0,len(route_list)):
 		if ( route_list[each][1] == route_list[each + 1][0] ):
 			continue
 		else:
@@ -212,25 +212,34 @@ try:
 			print("\nOption not supported. Please try '-h' or '--help'.")
 	else:
 		# All this is code to receive and translate output from main.R
-		# CSV_DATA = check_output(["main.R"])
-		# CSV_DATA = str(CSV_DATA)
-		# CSV_DATA = list(CSV_DATA)
-		# del(CSV_DATA[1])
-		# del(CSV_DATA[0])
-		# del(CSV_DATA[len(CSV_DATA) - 1])
-		# CSV_DATA = "".join(CSV_DATA)
-		A[path[len(path)-1][0]][path[len(path)-1][1]]=0 #sets the last node used to 0
-		#attempt to create a list of possible paths.
-		masterlist=[]
-		while True:
-			storedpath=pathfinder(A,0,2)  #runs the pathfinder function
-			if storedpath==False:         #if there is no possible path, pathfinder returns False and loop ends
-				break
-			else:                         #here's where im hitting issues. this part should add paths to 'masterlist' but doesn't seem to be
-				masterlist.append(storedpath)
-				A[storedpath[len(storedpath)-1][0]][storedpath[len(storedpath)-1][1]]=0
-				print(storedpath)
-				continue
+		CSV_DATA = check_output(["./main.R"])
+		# force into correct encoding
+		CSV_DATA = str(CSV_DATA)
+		# convert to list
+		CSV_DATA = list(CSV_DATA)
+		#delete unnecessary characters
+		del(CSV_DATA[1])
+		del(CSV_DATA[0])
+		del(CSV_DATA[len(CSV_DATA) - 1])
+		# rejoin
+		CSV_DATA = "".join(CSV_DATA)
+		# resplit into a list of strings, each string is a row in
+		# the initial CSV file
+		CSV_DATA = CSV_DATA.split("\\n")
+		for each in CSV_DATA:
+			print(each)
+		# A[path[len(path)-1][0]][path[len(path)-1][1]]=0 #sets the last node used to 0
+		# #attempt to create a list of possible paths.
+		# masterlist=[]
+		# while True:
+			# storedpath=pathfinder(A,0,2)  #runs the pathfinder function
+			# if storedpath==False:         #if there is no possible path, pathfinder returns False and loop ends
+				# break
+			# else:                         #here's where im hitting issues. this part should add paths to 'masterlist' but doesn't seem to be
+				# masterlist.append(storedpath)
+				# A[storedpath[len(storedpath)-1][0]][storedpath[len(storedpath)-1][1]]=0
+				# print(storedpath)
+				# continue
 
 
 except:
