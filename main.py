@@ -225,8 +225,14 @@ try:
 		CSV_DATA = "".join(CSV_DATA)
 		# resplit into a list of strings, each string is a row in
 		# the initial CSV file
-		CSV_DATA = CSV_DATA.split("\\n")
-		for each in CSV_DATA:
+		CSV_STRINGS = CSV_DATA.split("\\n")
+		CSV_DATA = []
+		for each in CSV_STRINGS:
+			CSV_DATA.append(each.split())
+		# CSV_DATA contains data more easily refrenced by Python
+		# CSV_STRINGS contains the same data, but in a more human-readable format
+		print_matrix(CSV_DATA)
+		for each in CSV_STRINGS:
 			print(each)
 		# A[path[len(path)-1][0]][path[len(path)-1][1]]=0 #sets the last node used to 0
 		# #attempt to create a list of possible paths.
