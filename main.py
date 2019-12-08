@@ -113,7 +113,6 @@ def grab(data):
 def cleanup(A):
 	fresh=[]
 	for i in range(len(A)):
-		print("Cleanup: %s" % (i))
 		if A[i] in fresh:
 			continue
 		else:
@@ -156,7 +155,6 @@ def pathfinder(A,start,end):
 	q=0 #used for possible range vals
 	p=0 # ""
 	while p<len(B[0]):
-		print("Pathfinder: " % (p))
 		if col==end:
 			working_paths.append(path_attempt)
 			path_attempt=[]
@@ -201,7 +199,6 @@ def run(A,D):
 	p=''
 	q=cleanup(pathfinder(A[grab(A)],int(D[0])-1,int(D[1])-1))
 	for i in range(D[2]):
-		print("Run: %s" % (i))
 		c=optimize(A[D[3+i]],q)
 		p=p+'The optimal path for %s is %s with the value %s'%(D[3+i],q[c[1]],c[0])+'\n'
 	return print(p)
@@ -266,7 +263,6 @@ try:
 		del(CSV_DATA[len(CSV_DATA) - 1])
 		# A = {"FlightPath":CSV_DATA}
 		A={'PathLength':[[0,1,1],[1,0,1],[1,1,0]],'MPG':[[0,2,3],[2,0,4],[3,4,0]],'Walking':[[0,9,30],[9,0,4],[30,4,0]]}
-		print(A)
 		# CSV_DATA contains data more easily refrenced by Python
 		# CSV_STRINGS contains the same data, but in a more human-readable format
 		print('Parameters for Start Location/End Location are the integers 1-' + str(len(A[grab(A)][0])))
