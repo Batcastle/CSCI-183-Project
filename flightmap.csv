@@ -1,11 +1,11 @@
-,Los Angeles,Anchorage,Honolulu,Seattle,Phoenix,Dallas,Las Vegas,Orlando,NYC,Chicago
-Los Angeles,0,2340,2587,971,356,0,229,2201,0,0
+,LA,Anchorage,Honolulu,Seattle,Phoenix,Dallas,Vegas,Orlando,NYC,Chicago
+LA,0,2340,2587,971,356,0,229,2201,0,0
 Anchorage,2340,0,0,1435,0,0,0,0,0,0
 Honolulu,2587,0,0,0,0,0,0,0,0,0
 Seattle,971,1435,0,0,1113,0,0,0,0,1733
 Phoenix,356,0,0,1113,0,884,258,0,0,0
 Dallas,0,0,0,0,884,0,,965,0,800
-Las Vegas,229,0,0,0,258,0,0,0,0,0
+Vegas,229,0,0,0,258,0,0,0,0,0
 Orlando,2201,0,0,0,0,965,0,0,942,983
 NYC,0,0,0,0,0,0,0,942,0,712
 Chicago,0,0,0,1733,0,800,0,983,712,0

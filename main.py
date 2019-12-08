@@ -27,85 +27,20 @@
 
 ############################################################
 
-#Import the Modules we need, preferably with only the functions and classes we need to reduce RAM usage
+# Import the Modules we need, preferably with only the functions and classes we need to reduce RAM usage
 
-#use the check_output() command to run outside scripts and return output
+# use the check_output() command to run outside scripts and return output
 from subprocess import check_output
 
-#use argv to take input on the command line
+# use argv to take input on the command line
 from sys import argv
 
-#get square root function
-from math import sqrt,floor
+# Treat 2D lists as R-style arrays
+import numpy as np
 
 ##########################################################################
 
 #Define Functions
-
-#Ajacentcy function
-def ajac(Point_A,Point_B):
-	#Vars should be lists of length 2 containing ints
-	#check if point A and point B are ajacent to each other either horizontally,
-	#vertically, or diagonally
-	#Return 0 if horizontal
-	#return 1 if vertical
-	#return 2 if diagonal
-	#return 3 if either:
-	#	Point A IS Point B
-	#	Point A and Point B ARE NOT ajacent
-
-	#Are Point A and Point B the same?
-	if (Point_A == Point_B):
-		return 3
-	#are point A and point B diagonal to each other
-	elif ( ((Point_A[0] - 1) == Point_B[0]) or ((Point_A[0] + 1) == Point_B[0]) ) and ((Point_A[1] - 1) == Point_B[1]) or ((Point_A[1] + 1) == Point_B[1]):
-		return 2
-	#Are Point A and Point B vertical to each other
-	elif ((Point_A[0] - 1) == Point_B[0]) or ((Point_A[0] + 1) == Point_B[0]):
-		return 1
-	#Are point A and Point B horizontal to each other
-	elif ((Point_A[1] - 1) == Point_B[1]) or ((Point_A[1] + 1) == Point_B[1]):
-		return 0
-	#else
-	else:
-		return 3
-
-
-
-#Check to make sure all points on route are connected
-def check_connected(route_list):
-	for each in range(0,len(route_list)):
-		if ( route_list[each][1] == route_list[each + 1][0] ):
-			continue
-		else:
-			return 1
-	return 0
-
-
-
-#create matrix of desired size
-def create_matrix(node_count):
-	side = sqrt(node_count)
-	matrix = []
-	if ( (side % 1) != 0 ):
-		side = int(floor(side))
-		side = side - 1
-		top_side = side
-		left_side = side + 1
-	else:
-		top_side = int(floor(side))
-		left_side = int(floor(side))
-	for each in range(0,left_side):
-		matrix.append([])
-	for each in matrix:
-		for each in range(0,top_side):
-			matrix[each].append(1)
-	for each in range(0,top_side):
-		matrix[each][each] = 0
-
-	return(matrix)
-
-
 
 #print 2D vector in a nice, easy to read method
 def pretty_best_path_output(best_path):
@@ -160,41 +95,127 @@ def parser(A,start,end):
             row=row+1
     print(path)
 
-#function to take easiest path and return it. Returns False if there is no valid path
+#
+def options(data):
+    option_view=''
+    for i in data:
+        option_view=option_view+ ' ' + str(i)
+    return(option_view)
+
+#
+def grab(data):
+    lencheck=''
+    for i in data:
+        lencheck=str(i)
+    return(lencheck)
+
+#
+def cleanup(A):
+	fresh=[]
+	for i in range(len(A)):
+		print("Cleanup: %s" % (i))
+		if A[i] in fresh:
+			continue
+		else:
+			fresh.append(A[i])
+	return fresh
+
+#
+def Trueval(A,paths):
+    pathval=[]
+    for i in range(len(paths)):
+        total=0
+        for j in range(len(paths[i])):
+            total=total+A[paths[i][j][0]][paths[i][j][1]]
+        pathval.append(total)
+    return(pathval)
+
+#
+def optimize(A,path):
+    val=9999999999999999999999999999999
+    best=[]
+    Check=Trueval(A,path)
+    for i in range(len(Check)):
+        if Check[i]<val:
+            val=Check[i]
+            best=i
+    return([val,best])
+
+# function to take easiest path and return it. Returns False if there is no valid path
 def pathfinder(A,start,end):
-    row=0
-    col=start   #initialize row and column indices
-    noback=[]   #list that saves columns that cannot be returned to
-    path=[]     #list of indices traversed, aka path taken
-    try:
-        while True:
-            if col == end:
-                break
-            for i in noback:
-                if row==i:
-                    row=row+1
-            if A[row][col]>0:
-                path.append([row,col])
-                noback.append(col)
-                col=row
-                row=0
-            else:
-                row=row+1
-    except:
-        return(False)
-    return(path)
+	if start>end:
+		c=start
+		start=end
+		end=c
+	B=np.array(list.copy(A))
+	row=0
+	col=start   #initialize row and column indices
+	noback=[]   #list that saves columns that cannot be returned to
+	working_paths=[]     #list of indices traversed, aka path taken
+	path_attempt=[]
+	q=0 #used for possible range vals
+	p=0 # ""
+	while p<len(B[0]):
+		print("Pathfinder: " % (p))
+		if col==end:
+			working_paths.append(path_attempt)
+			path_attempt=[]
+			B=np.array(list.copy(A))
+			q+=1
+			row=0
+			col=start
+			noback=[]
+			if len(B[0])-q==0:
+				p+=1
+				q=0
+			for i in range(p,len(B[0])-q):
+				B[i]=0
+				B[:,i]=0
+		if row>len(B[0])-1:
+			B=np.array(list.copy(A))
+			row=0
+			col=start
+			noback=[]
+			path_attempt=[]
+			q+=1
+			if len(B[0])-q==0:
+				p+=1
+				q=0
+			for i in range(p,len(B[0])-q):
+				B[i]=0
+				B[:,i]=0
+		for i in noback:
+			if row==i:
+				row=row+1
+		if B[row][col]>0:
+			path_attempt.append([row,col])
+			noback.append(col)
+			col=row
+			row=0
+		else:
+			row+=1
+	return(working_paths)
+
+#
+def run(A,D):
+	p=''
+	q=cleanup(pathfinder(A[grab(A)],int(D[0])-1,int(D[1])-1))
+	for i in range(D[2]):
+		print("Run: %s" % (i))
+		c=optimize(A[D[3+i]],q)
+		p=p+'The optimal path for %s is %s with the value %s'%(D[3+i],q[c[1]],c[0])+'\n'
+	return print(p)
 
 
 ##########################################################################
 
 #Define Initial Variables
 
-#Street List, this will be 2D
-#This WAS a dictionary, until I realized that was egreegious and not needed
-MAP = []
-
 #Version of the project. Any time you make a major change, bump the number by one.
-VERSION = "0.0.6-alpha1"
+VERSION = "0.0.8-alpha1"
+
+#
+Display=[]
 
 #Use argc so we don't go over the length of argv
 argc = len(argv)
@@ -229,23 +250,36 @@ try:
 		CSV_DATA = []
 		for each in CSV_STRINGS:
 			CSV_DATA.append(each.split())
+		LOCATIONS = CSV_DATA[0]
+		del(LOCATIONS[0])
+		del(CSV_DATA[0])
+		for each in range(0,(len(CSV_DATA) - 1)):
+			del(CSV_DATA[each][1])
+			del(CSV_DATA[each][0])
+		for each in range(0,(len(CSV_DATA) - 1)):
+			for each1 in range(0,(len(CSV_DATA[each]) - 1)):
+				if (CSV_DATA[each][each1] == "NA"):
+					CSV_DATA[each][each1] = 0
+		for each in range(0,(len(CSV_DATA) - 1)):
+			for each1 in range(0,(len(CSV_DATA[each]))):
+				CSV_DATA[each][each1] = int(CSV_DATA[each][each1])
+		del(CSV_DATA[len(CSV_DATA) - 1])
+		# A = {"FlightPath":CSV_DATA}
+		A={'PathLength':[[0,1,1],[1,0,1],[1,1,0]],'MPG':[[0,2,3],[2,0,4],[3,4,0]],'Walking':[[0,9,30],[9,0,4],[30,4,0]]}
+		print(A)
 		# CSV_DATA contains data more easily refrenced by Python
 		# CSV_STRINGS contains the same data, but in a more human-readable format
-		print_matrix(CSV_DATA)
-		for each in CSV_STRINGS:
-			print(each)
-		# A[path[len(path)-1][0]][path[len(path)-1][1]]=0 #sets the last node used to 0
-		# #attempt to create a list of possible paths.
-		# masterlist=[]
-		# while True:
-			# storedpath=pathfinder(A,0,2)  #runs the pathfinder function
-			# if storedpath==False:         #if there is no possible path, pathfinder returns False and loop ends
-				# break
-			# else:                         #here's where im hitting issues. this part should add paths to 'masterlist' but doesn't seem to be
-				# masterlist.append(storedpath)
-				# A[storedpath[len(storedpath)-1][0]][storedpath[len(storedpath)-1][1]]=0
-				# print(storedpath)
-				# continue
+		print('Parameters for Start Location/End Location are the integers 1-' + str(len(A[grab(A)][0])))
+		try:
+			Display.append(int(input('\nStart Location: ')))
+			Display.append(int(input('\nEnd Location: ')))
+			Display.append(int(input('\nAmount of variables (options will include: ' + str(options(A)) + ' ): ')))
+			for i in range(0,Display[2]):
+				Display.append(input('\nVariable ' + str(i+1) + '\n'))
+			run(A,Display)
+		except Exception as err:
+			# print('Please pay attention to the prompts and enter the data exactly as displayed, keep in mind that each word in the options is a different variable name ')
+			print("ERROR: %s " % (err))
 
 
 except:
