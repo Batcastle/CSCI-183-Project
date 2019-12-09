@@ -43,57 +43,14 @@ import numpy as np
 #Define Functions
 
 #print 2D vector in a nice, easy to read method
-def pretty_best_path_output(best_path):
-	print("START ---> ",end="")
-	for each in best_path:
-		print("(%s,%s) ---> " % (each[0],each[1]), end="")
-	print("END")
-
-
-
-
-#Print all possible paths
-def pretty_all_paths_output(paths):
-	number = 1
-	for each in paths:
-		print("\nPath %s:" % (number))
-		pretty_best_path_output(each)
-		number = number + 1
-	print("")
-
-
-
-
-#Print the Matrix (mostly for debugging)
-def print_matrix(array):
-	for row in array:
-		for each in row:
-			print(each,end=" ")
-		print()
-
-
-
-
-#LOOPS THROUGH A MATRIX
-def parser(A,start,end):
-    row=0
-    col=start
-    noback=[]
-    path=[]
-    while True:
-        if col == end:
-            break
-        for i in noback:
-            if row==i:
-                row=row+1
-        if A[row][col]>0:
-            path.append([row,col])
-            noback.append(col)
-            col=row
-            row=0
-        else:
-            row=row+1
-    print(path)
+def pretty_best_path_output(best_path,distance):
+	print("START (%s)---> " % best_path[0],end="")
+	for each in range(len(best_path) - 1):
+		if (each == 0):
+			continue
+		print("%s ---> " % (best_path[each]), end="")
+	print("END (%s)" % (best_path[len(best_path) - 1]))
+	print("TOTAL DISTANCE: %s" % (distance))
 
 #
 def options(data):
@@ -169,7 +126,7 @@ def pathfinder(A,start,end):
 			for i in range(p,len(B[0])-q):
 				B[i]=0
 				B[:,i]=0
-		if row>len(B[0])-1:
+		if row>len(B[0])-2:
 			B=np.array(list.copy(A))
 			row=0
 			col=start
@@ -195,12 +152,18 @@ def pathfinder(A,start,end):
 	return(working_paths)
 
 #
-def run(A,D):
+def run(A,D,LOCATIONS):
 	p=''
 	q=cleanup(pathfinder(A[grab(A)],int(D[0])-1,int(D[1])-1))
 	for i in range(D[2]):
 		c=optimize(A[D[3+i]],q)
-		p=p+'The optimal path for %s is %s with the value %s'%(D[3+i],q[c[1]],c[0])+'\n'
+		path_list = []
+		for i in range(len(q[c[1]])):
+			if (i == 0):
+				path_list.append(LOCATIONS[q[c[1]][i][1]])
+			path_list.append(LOCATIONS[q[c[1]][i][0]])
+		pretty_best_path_output(path_list,c[0])
+		# p=p+'The optimal path for %s is %s with the value %s'%(D[3+i],q[c[1]],c[0])+'\n'
 	return print(p)
 
 
@@ -261,10 +224,11 @@ try:
 			for each1 in range(0,(len(CSV_DATA[each]))):
 				CSV_DATA[each][each1] = int(CSV_DATA[each][each1])
 		del(CSV_DATA[len(CSV_DATA) - 1])
-		# A = {"FlightPath":CSV_DATA}
-		A={'PathLength':[[0,1,1],[1,0,1],[1,1,0]],'MPG':[[0,2,3],[2,0,4],[3,4,0]],'Walking':[[0,9,30],[9,0,4],[30,4,0]]}
+		print_matrix(CSV_DATA)
+		A = {"FlightPath":CSV_DATA}
 		# CSV_DATA contains data more easily refrenced by Python
 		# CSV_STRINGS contains the same data, but in a more human-readable format
+		print(A)
 		print('Parameters for Start Location/End Location are the integers 1-' + str(len(A[grab(A)][0])))
 		try:
 			Display.append(int(input('\nStart Location: ')))
@@ -272,11 +236,12 @@ try:
 			Display.append(int(input('\nAmount of variables (options will include: ' + str(options(A)) + ' ): ')))
 			for i in range(0,Display[2]):
 				Display.append(input('\nVariable ' + str(i+1) + '\n'))
-			run(A,Display)
+			run(A,Display,LOCATIONS)
 		except Exception as err:
-			# print('Please pay attention to the prompts and enter the data exactly as displayed, keep in mind that each word in the options is a different variable name ')
+			print('Please pay attention to the prompts and enter the data exactly as displayed, keep in mind that each word in the options is a different variable name ')
 			print("ERROR: %s " % (err))
 
 
-except:
+except Exception as err:
 	print("\nAn error has occured.")
+	print("ERROR: %s " % (err))
