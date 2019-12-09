@@ -44,7 +44,7 @@ import numpy as np
 
 #print 2D vector in a nice, easy to read method
 def pretty_best_path_output(best_path,distance):
-	print("START (%s)---> " % best_path[0],end="")
+	print("START (%s)---> " % (best_path[0]),end="")
 	for each in range(len(best_path) - 1):
 		if (each == 0):
 			continue
@@ -54,21 +54,21 @@ def pretty_best_path_output(best_path,distance):
 
 #
 def options(data):
-    option_view=''
+    option_view = ''
     for i in data:
-        option_view=option_view+ ' ' + str(i)
+        option_view = option_view + ' ' + str(i)
     return(option_view)
 
 #
 def grab(data):
-    lencheck=''
+    lencheck = ''
     for i in data:
-        lencheck=str(i)
+        lencheck = str(i)
     return(lencheck)
 
 #
 def cleanup(A):
-	fresh=[]
+	fresh = []
 	for i in range(len(A)):
 		if A[i] in fresh:
 			continue
@@ -78,92 +78,95 @@ def cleanup(A):
 
 #
 def Trueval(A,paths):
-    pathval=[]
+    pathval = []
     for i in range(len(paths)):
-        total=0
+        total = 0
         for j in range(len(paths[i])):
-            total=total+A[paths[i][j][0]][paths[i][j][1]]
+            total = total + A[paths[i][j][0]][paths[i][j][1]]
         pathval.append(total)
     return(pathval)
 
 #
 def optimize(A,path):
-    val=9999999999999999999999999999999
-    best=[]
-    Check=Trueval(A,path)
+    val = 9999999999999999999999999999999
+    best = []
+    Check = Trueval(A,path)
     for i in range(len(Check)):
-        if Check[i]<val:
-            val=Check[i]
-            best=i
+        if (Check[i] < val):
+            val = Check[i]
+            best = i
     return([val,best])
 
 # function to take easiest path and return it. Returns False if there is no valid path
 def pathfinder(A,start,end):
-	if start>end:
-		c=start
-		start=end
-		end=c
-	B=np.array(list.copy(A))
-	row=0
-	col=start   #initialize row and column indices
-	noback=[]   #list that saves columns that cannot be returned to
-	working_paths=[]     #list of indices traversed, aka path taken
-	path_attempt=[]
-	q=0 #used for possible range vals
-	p=0 # ""
-	while p<len(B[0]):
-		if col==end:
+	if (start > end):
+		c = start
+		start = end
+		end = c
+	B = np.array(list.copy(A))
+	if (end == len(B[0])-1):
+		adj = 1
+	else:
+		adj = 2
+	row = 0
+	col = start   #initialize row and column indices
+	noback = []   #list that saves columns that cannot be returned to
+	working_paths = []     #list of indices traversed, aka path taken
+	path_attempt = []
+	q = 0 #used for possible range vals
+	p = 0 # ""
+	while (p < len(B[0])):
+		if (col == end):
 			working_paths.append(path_attempt)
-			path_attempt=[]
-			B=np.array(list.copy(A))
-			q+=1
-			row=0
-			col=start
-			noback=[]
-			if len(B[0])-q==0:
-				p+=1
-				q=0
+			path_attempt = []
+			B = np.array(list.copy(A))
+			q = q + 1
+			row = 0
+			col = start
+			noback = []
+			if ((len(B[0]) - q ) == 0):
+				p = p + 1
+				q = 0
 			for i in range(p,len(B[0])-q):
-				B[i]=0
-				B[:,i]=0
-		if row>len(B[0])-2:
-			B=np.array(list.copy(A))
-			row=0
-			col=start
-			noback=[]
-			path_attempt=[]
-			q+=1
-			if len(B[0])-q==0:
-				p+=1
-				q=0
+				B[i] = 0
+				B[:,i] = 0
+		if (row > (len(B[0]) - adj)):
+			B = np.array(list.copy(A))
+			row = 0
+			col = start
+			noback = []
+			path_attempt = []
+			q = q + 1
+			if ((len(B[0]) - q ) == 0):
+				p = p + 1
+				q = 0
 			for i in range(p,len(B[0])-q):
-				B[i]=0
-				B[:,i]=0
+				B[i] = 0
+				B[:,i] = 0
 		for i in noback:
-			if row==i:
-				row=row+1
-		if B[row][col]>0:
+			if (row == i):
+				row = row + 1
+		if (B[row][col] > 0):
 			path_attempt.append([row,col])
 			noback.append(col)
-			col=row
-			row=0
+			col = row
+			row = 0
 		else:
-			row+=1
+			row = row + 1
 	return(working_paths)
 
 #
 def run(A,D,LOCATIONS):
-	p=''
-	q=cleanup(pathfinder(A[grab(A)],int(D[0])-1,int(D[1])-1))
+	p = ''
+	q = cleanup(pathfinder(A[grab(A)],int(D[0])-1,int(D[1])-1))
 	for i in range(D[2]):
-		c=optimize(A[D[3+i]],q)
+		c = optimize(A[D[3+i]],q)
 		path_list = []
 		for i in range(len(q[c[1]])):
 			if (i == 0):
 				path_list.append(LOCATIONS[q[c[1]][i][1]])
 			path_list.append(LOCATIONS[q[c[1]][i][0]])
 		pretty_best_path_output(path_list,c[0])
-		# p=p+'The optimal path for %s is %s with the value %s'%(D[3+i],q[c[1]],c[0])+'\n'
 	return print(p)
 
 
@@ -172,7 +175,7 @@ def run(A,D,LOCATIONS):
 #Define Initial Variables
 
 #Version of the project. Any time you make a major change, bump the number by one.
-VERSION = "0.0.8-alpha1"
+VERSION = "0.1.0-alpha2"
 
 #
 Display=[]
@@ -224,18 +227,18 @@ try:
 			for each1 in range(0,(len(CSV_DATA[each]))):
 				CSV_DATA[each][each1] = int(CSV_DATA[each][each1])
 		del(CSV_DATA[len(CSV_DATA) - 1])
-		print_matrix(CSV_DATA)
 		A = {"FlightPath":CSV_DATA}
 		# CSV_DATA contains data more easily refrenced by Python
 		# CSV_STRINGS contains the same data, but in a more human-readable format
-		print(A)
 		print('Parameters for Start Location/End Location are the integers 1-' + str(len(A[grab(A)][0])))
+		for each in range(1,len(LOCATIONS) + 1):
+			print("%s : %s" % (each, LOCATIONS[each - 1]))
 		try:
 			Display.append(int(input('\nStart Location: ')))
 			Display.append(int(input('\nEnd Location: ')))
 			Display.append(int(input('\nAmount of variables (options will include: ' + str(options(A)) + ' ): ')))
 			for i in range(0,Display[2]):
-				Display.append(input('\nVariable ' + str(i+1) + '\n'))
+				Display.append(input('\nVariable ' + str(i + 1) + '\n'))
 			run(A,Display,LOCATIONS)
 		except Exception as err:
 			print('Please pay attention to the prompts and enter the data exactly as displayed, keep in mind that each word in the options is a different variable name ')
