@@ -40,9 +40,9 @@ import numpy as np
 
 ##########################################################################
 
-#Define Functions
+# Define Functions
 
-#print 2D vector in a nice, easy to read method
+# print 2D vector in a nice, easy to read method
 def pretty_best_path_output(best_path,distance):
 	print("START (%s)---> " % (best_path[0]),end="")
 	for each in range(len(best_path) - 1):
@@ -52,7 +52,7 @@ def pretty_best_path_output(best_path,distance):
 	print("END (%s)" % (best_path[len(best_path) - 1]))
 	print("TOTAL DISTANCE: %s" % (distance))
 
-#
+# Make a string of keys
 def options(data):
     option_view = ''
     for i in data:
@@ -86,7 +86,7 @@ def Trueval(A,paths):
         pathval.append(total)
     return(pathval)
 
-#
+# Find which path is shortest
 def optimize(A,path):
     val = 9999999999999999999999999999999
     best = []
@@ -109,11 +109,11 @@ def pathfinder(A,start,end):
 	else:
 		adj = 2
 	row = 0
-	col = start   #initialize row and column indices
-	noback = []   #list that saves columns that cannot be returned to
-	working_paths = []     #list of indices traversed, aka path taken
+	col = start   # initialize row and column indices
+	noback = []   # list that saves columns that cannot be returned to
+	working_paths = []     # list of indices traversed, aka path taken
 	path_attempt = []
-	q = 0 #used for possible range vals
+	q = 0 # used for possible range vals
 	p = 0 # ""
 	while (p < len(B[0])):
 		if (col == end):
@@ -155,7 +155,7 @@ def pathfinder(A,start,end):
 			row = row + 1
 	return(working_paths)
 
-#
+# main function
 def run(A,D,LOCATIONS):
 	p = ''
 	q = cleanup(pathfinder(A[grab(A)],int(D[0])-1,int(D[1])-1))
@@ -172,20 +172,20 @@ def run(A,D,LOCATIONS):
 
 ##########################################################################
 
-#Define Initial Variables
+# Define Initial Variables
 
-#Version of the project. Any time you make a major change, bump the number by one.
+# Version of the project. Any time you make a major change, bump the number by one.
 VERSION = "0.1.0-alpha2"
 
-#
+# Vars to check
 Display=[]
 
-#Use argc so we don't go over the length of argv
+# Use argc so we don't go over the length of argv
 argc = len(argv)
 
 ################################################################################
 
-#Do all the I/O and processing we need
+# Do all the I/O and processing we need
 try:
 	if (argc > 1):
 		if (argv[1] == "-h" or argv[1] == "--help"):
@@ -196,12 +196,12 @@ try:
 			print("\nOption not supported. Please try '-h' or '--help'.")
 	else:
 		# All this is code to receive and translate output from main.R
-		CSV_DATA = check_output(["./main.R"])
+		CSV_DATA = check_output(["./read_csv.R"])
 		# force into correct encoding
 		CSV_DATA = str(CSV_DATA)
 		# convert to list
 		CSV_DATA = list(CSV_DATA)
-		#delete unnecessary characters
+		# delete unnecessary characters
 		del(CSV_DATA[1])
 		del(CSV_DATA[0])
 		del(CSV_DATA[len(CSV_DATA) - 1])

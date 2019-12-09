@@ -23,13 +23,16 @@
 #  MA 02110-1301, USA.
 #
 #
-#Main R File, use as template for the others
+#Main R File
+# Get list of options passed
 argv = commandArgs(trailingOnly=TRUE)
 argc = length(argv)
-options(width=10000) 
-VERSION = "0.0.2-alpha1"
+# set output "window"
+options(width=10000)
+VERSION = "0.0.3-alpha1"
 
 if ( argc >= 1 ){
+	# Help and version options
 	if (argv[1] == "-h" | argv[1] == "--help"){
 		cat("main.R is used to read the file 'flightmap.csv' in the same directory as this file, and is only supposed to be called by 'main.py'.Please only interact with 'main.py' from command line.")
 	} else if (argv[1] == "-v" | argv[1] == "--version"){
@@ -38,8 +41,8 @@ if ( argc >= 1 ){
 		cat("Option not supported. Please try '-h' or '--help'.")
 	}
 } else {
+	# Read CSV
 	flightmap = read.csv("flightmap.csv")
-	# when you have the data read in and done any pre-cleaning needed, just use print(), cat(), or head() to send it out to main.py
-	# whatever is cleanist
+	# print just the data we needed
 	print(flightmap[1:10,1:11])
 }
